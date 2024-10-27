@@ -76,11 +76,11 @@ public class MainTeleOp extends LinearOpMode {
             leftBackPower /= max;
             rightBackPower /= max;
         }
-        double power_module = 2 / 3f;
-        leftFrontDrive.setPower(leftFrontPower * 1 / 2);
-        rightFrontDrive.setPower(rightFrontPower * 1 / 2);
-        leftBackDrive.setPower(leftBackPower * 1 / 2);
-        rightBackDrive.setPower(rightBackPower * 1 / 2);
+        double power_module = 1 / 2f;
+        leftFrontDrive.setPower(leftFrontPower * power_module);
+        rightFrontDrive.setPower(rightFrontPower * power_module);
+        leftBackDrive.setPower(leftBackPower * power_module);
+        rightBackDrive.setPower(rightBackPower * power_module);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
