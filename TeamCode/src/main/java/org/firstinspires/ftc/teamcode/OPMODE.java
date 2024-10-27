@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="OPMODE", group="Linear OpMode")
+@TeleOp(name = "OPMODE", group = "Linear OpMode")
 //Disabled
 public class OPMODE extends LinearOpMode {
 
@@ -72,16 +72,17 @@ public class OPMODE extends LinearOpMode {
     public float rightLinearSlidePos;
 
     private double tmp = 0;
+
     public void moveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
         tmp = x;
         x = y;
         y = yaw;
         yaw = tmp;
-        double leftFrontPower    = y + x + yaw;
-        double rightFrontPower   = y - x - yaw;
-        double leftBackPower     = y - x + yaw;
-        double rightBackPower    = y + x - yaw;
+        double leftFrontPower = y + x + yaw;
+        double rightFrontPower = y - x - yaw;
+        double leftBackPower = y - x + yaw;
+        double rightBackPower = y + x - yaw;
         // Normalize wheel powers to be less than 1.0
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
@@ -100,11 +101,12 @@ public class OPMODE extends LinearOpMode {
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
     }
+
     @Override
     public void runOpMode() {
 
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_back_drive");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "left_front_drive");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "left_front_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
 
@@ -113,7 +115,7 @@ public class OPMODE extends LinearOpMode {
 
         intake = hardwareMap.get(DcMotor.class, "intake");
         intake.setDirection(DcMotor.Direction.REVERSE);
-        
+
         intakeServo = hardwareMap.get(Servo.class, "intake_spin");
 
         airplane = hardwareMap.get(Servo.class, "airplane_release");
@@ -151,7 +153,7 @@ public class OPMODE extends LinearOpMode {
             double max;
 
             // linear slides
-            float linearPower = gamepad2.left_stick_y/2;
+            float linearPower = gamepad2.left_stick_y / 2;
             leftLinearSlidePos = leftLinearSlide.getCurrentPosition();
             rightLinearSlidePos = rightLinearSlide.getCurrentPosition();
 
@@ -162,33 +164,27 @@ public class OPMODE extends LinearOpMode {
                 if (-200.0f < leftLinearSlidePos) {
                     magazineSpinner.setPosition(0.656);
                     stationaryMag = false;
-                }
-                else if (-350.0f < leftLinearSlidePos) {
+                } else if (-350.0f < leftLinearSlidePos) {
                     magazineSpinner.setPosition(0.038);
                     stationaryMag = false;
-                }
-                else if (leftLinearSlidePos > -460) {
+                } else if (leftLinearSlidePos > -460) {
                     magazineSpinner.setPosition(0.231);
                     stationaryMag = false;
-                }
-                else {
+                } else {
                     stationaryMag = true;
                 }
 
 
-            }
-            else if (linearPower > 0) {
+            } else if (linearPower > 0) {
                 leftLinearSlide.setPower((linearPower));
                 rightLinearSlide.setPower((linearPower));
                 if (-30 > leftLinearSlidePos) {
                     magazineSpinner.setPosition(0.656);
                     stationaryMag = false;
-                }
-                else {
+                } else {
                     stationaryMag = true;
                 }
-            }
-            else {
+            } else {
                 leftLinearSlide.setPower(0.0);
                 rightLinearSlide.setPower(0.0);
             }
@@ -196,8 +192,7 @@ public class OPMODE extends LinearOpMode {
             // pixel pusher mechanism
             if (gamepad2.a) {
                 pixelPusher.setPosition(0.75);
-            }
-            else {
+            } else {
                 pixelPusher.setPosition(0.4);
             }
 
@@ -214,8 +209,7 @@ public class OPMODE extends LinearOpMode {
 
             if (gamepad2.left_bumper) {
                 magazineRelease.setPosition(0.35);
-            }
-            else {
+            } else {
                 magazineRelease.setPosition(0.717);
             }
 
@@ -223,8 +217,7 @@ public class OPMODE extends LinearOpMode {
             // intake activation
             if (intakeDown) {
                 intakeServo.setPosition(0.664);
-            }
-            else {
+            } else {
                 intakeServo.setPosition(0.062);
             }
             if (gamepad2.x) {
@@ -235,43 +228,39 @@ public class OPMODE extends LinearOpMode {
             }
             if (intakeOn) {
                 intake.setPower(0.5);
-            }
-            else {
+            } else {
                 intake.setPower(0.0);
             }
 
             // airplane launcher
             if (gamepad2.right_bumper) {
                 airplane.setPosition(0.540);
-            }
-            else {
+            } else {
                 airplane.setPosition(0.610);
             }
 
             // gate lifter
             if (gamepad2.right_trigger >= 0.5) {
                 lifterPosition += ARM_SPEED;
-            }
-            else if (gamepad2.left_trigger >= 0.5) {
+            } else if (gamepad2.left_trigger >= 0.5) {
                 lifterPosition -= ARM_SPEED;
             }
             lifterPosition = Range.clip(lifterPosition, ARM_MIN, ARM_MAX);
             rightGateLifter.setPosition(lifterPosition);
-            leftGateLifter.setPosition(1-lifterPosition);
+            leftGateLifter.setPosition(1 - lifterPosition);
 
 
             if (gamepad1.a) {
                 armPosition += ARM_SPEED;
-            }
-            else if (gamepad1.y) {
+            } else if (gamepad1.y) {
                 armPosition -= ARM_SPEED;
             }
             armPosition = Range.clip(armPosition, ARM_MIN, ARM_MAX);
 
 
-            drive  = -gamepad1.left_stick_y  / OP_C;
-            strafe = -gamepad1.left_stick_x  / OP_C;
-            turn   = -gamepad1.right_stick_x / OP_C;
+            drive = -gamepad1.left_stick_y / OP_C;
+            strafe = -gamepad1.left_stick_x / OP_C;
+            turn = -gamepad1.right_stick_x / OP_C;
             moveRobot(drive, strafe, turn);
 
             // Show the elapsed game time and wheel power.
@@ -282,4 +271,5 @@ public class OPMODE extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
-    }}
+    }
+}

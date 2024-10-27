@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Perchance-Maybe", group="Linear OpMode")
+@TeleOp(name = "Perchance-Maybe", group = "Linear OpMode")
 //Disabled
 public class Perchance extends LinearOpMode {
 
@@ -61,10 +61,10 @@ public class Perchance extends LinearOpMode {
         // x = y;
         // y = yaw;
         // yaw = tmp;
-        double leftFrontPower    = y + x + yaw;
-        double rightFrontPower   = y - x - yaw;
-        double leftBackPower     = y - x + yaw;
-        double rightBackPower    = y + x - yaw;
+        double leftFrontPower = y + x + yaw;
+        double rightFrontPower = y - x - yaw;
+        double leftBackPower = y - x + yaw;
+        double rightBackPower = y + x - yaw;
         // Normalize wheel powers to be less than 1.0
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
@@ -76,12 +76,12 @@ public class Perchance extends LinearOpMode {
             leftBackPower /= max;
             rightBackPower /= max;
         }
-        double power_module = 2/3;
-        leftFrontDrive.setPower(leftFrontPower * 1/2);
-        rightFrontDrive.setPower(rightFrontPower * 1/2);
-        leftBackDrive.setPower(leftBackPower * 1/2);
-        rightBackDrive.setPower(rightBackPower * 1/2);
-        
+        double power_module = 2 / 3;
+        leftFrontDrive.setPower(leftFrontPower * 1 / 2);
+        rightFrontDrive.setPower(rightFrontPower * 1 / 2);
+        leftBackDrive.setPower(leftBackPower * 1 / 2);
+        rightBackDrive.setPower(rightBackPower * 1 / 2);
+
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
         telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
@@ -94,9 +94,9 @@ public class Perchance extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "left_front_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
-        
-        intake = hardwareMap.get(CRServo.class, "intake");        
-        intake_winch = hardwareMap.get(CRServo.class, "intake_winch");        
+
+        intake = hardwareMap.get(CRServo.class, "intake");
+        intake_winch = hardwareMap.get(CRServo.class, "intake_winch");
         intake_rotation = hardwareMap.get(Servo.class, "intake_rotation");
         double rotation = 0;
 
@@ -107,7 +107,7 @@ public class Perchance extends LinearOpMode {
 
         leftSlideDrive = hardwareMap.get(DcMotor.class, "left_slide");
         rightSlideDrive = hardwareMap.get(DcMotor.class, "right_slide");
-        
+
         leftSlideDrive.setDirection(DcMotor.Direction.FORWARD);
         leftSlideDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftSlideDrive.setTargetPosition(0);
@@ -116,7 +116,7 @@ public class Perchance extends LinearOpMode {
         rightSlideDrive.setDirection(DcMotor.Direction.REVERSE);
         rightSlideDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSlideDrive.setTargetPosition(0);
-        rightSlideDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);  
+        rightSlideDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         int leftSlidePosition = leftSlideDrive.getCurrentPosition();
         int rightSlidePosition = rightSlideDrive.getCurrentPosition();
@@ -127,13 +127,12 @@ public class Perchance extends LinearOpMode {
         boolean button_pressed = false;
 
 
-
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        
+
         waitForStart();
         runtime.reset();
-        
+
         while (opModeIsActive()) {
             moveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
             if (gamepad2.x) {
@@ -142,70 +141,62 @@ public class Perchance extends LinearOpMode {
             if (gamepad2.y) {
                 rotation = Math.max(rotation - 1, 0);
             }
-            intake_rotation.setPosition(rotation/270.0);
+            intake_rotation.setPosition(rotation / 270.0);
             telemetry.addData("Servo_rotation", rotation);
 
             if (gamepad1.a) {
                 intake.setPower(1);
                 telemetry.addData("Status", "servo move?");
-            }
-    
-            else if (gamepad1.b) {
+            } else if (gamepad1.b) {
                 intake.setPower(-1);
                 telemetry.addData("Status", "servo other move");
-            }
-            else {
+            } else {
                 intake.setPower(0);
                 telemetry.addData("Status", "servo no move");
             }
             if (gamepad2.a) {
                 intake_winch.setPower(1);
                 telemetry.addData("Status", "servo move?");
-            }
-    
-            else if (gamepad2.b) {
+            } else if (gamepad2.b) {
                 intake_winch.setPower(-1);
                 telemetry.addData("Status", "servo other move");
-            }
-            else {
+            } else {
                 intake_winch.setPower(0);
                 telemetry.addData("Status", "servo no move");
             }
-            
-    
+
+
             if (gamepad1.x) {
                 if (!button_pressed) {
                     button_pressed = true;
                     slide_active = !slide_active;
                 }
-                
-            }
-            else if (button_pressed) {
+
+            } else if (button_pressed) {
                 button_pressed = false;
             }
             if (slide_active) {
                 leftSlideDrive.setTargetPosition(slideOut);
-                rightSlideDrive.setTargetPosition(slideOut); 
-    
+                rightSlideDrive.setTargetPosition(slideOut);
+
                 leftSlideDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 rightSlideDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    
+
                 leftSlideDrive.setPower(0.75);
                 rightSlideDrive.setPower(0.75);
-    
+
                 telemetry.addData("Status", "Moving to position: " + slideOut);
 
-            }
-            else {
+            } else {
                 leftSlideDrive.setTargetPosition(slideIn);
-                rightSlideDrive.setTargetPosition(slideIn); 
-    
+                rightSlideDrive.setTargetPosition(slideIn);
+
                 leftSlideDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 rightSlideDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    
+
                 leftSlideDrive.setPower(0.5);
                 rightSlideDrive.setPower(0.5);
-                
+
                 telemetry.addData("Status", "Moving to position: " + slideIn);
             }
 
@@ -214,7 +205,7 @@ public class Perchance extends LinearOpMode {
                 leftSlideDrive.setPower(0);
                 telemetry.addData("Status", "left reached");
             }
-    
+
             if (!rightSlideDrive.isBusy()) {
                 rightSlideDrive.setPower(0);
                 telemetry.addData("Status", "right reached");
@@ -226,12 +217,12 @@ public class Perchance extends LinearOpMode {
 
         }
     }
-    
+
     // @Override
     // public void stop() {
     //     leftSlideDrive.setPower(0);
     //     rightSlideDrive.setPower(0);
-        
+
     //     intake.setPower(0);
     // }
 }

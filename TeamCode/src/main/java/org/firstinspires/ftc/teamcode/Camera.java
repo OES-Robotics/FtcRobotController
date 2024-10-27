@@ -41,16 +41,17 @@ public class Camera extends LinearOpMode {
     public float rightLinearSlidePos;
 
     private double tmp = 0;
+
     public void moveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
         tmp = x;
         x = y;
         y = yaw;
         yaw = tmp;
-        double leftFrontPower    = y + x + yaw;
-        double rightFrontPower   = y - x - yaw;
-        double leftBackPower     = y - x + yaw;
-        double rightBackPower    = y + x - yaw;
+        double leftFrontPower = y + x + yaw;
+        double rightFrontPower = y - x - yaw;
+        double leftBackPower = y - x + yaw;
+        double rightBackPower = y + x - yaw;
         // Normalize wheel powers to be less than 1.0
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
@@ -73,8 +74,8 @@ public class Camera extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        a  = hardwareMap.get(DcMotor.class, "left_back_drive");
-        b  = hardwareMap.get(DcMotor.class, "left_front_drive");
+        a = hardwareMap.get(DcMotor.class, "left_back_drive");
+        b = hardwareMap.get(DcMotor.class, "left_front_drive");
         c = hardwareMap.get(DcMotor.class, "right_front_drive");
         d = hardwareMap.get(DcMotor.class, "right_back_drive");
 
@@ -111,7 +112,7 @@ public class Camera extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        
+
         float a1 = a.getCurrentPosition();
         float b1 = a.getCurrentPosition();
         float c1 = a.getCurrentPosition();
@@ -123,14 +124,14 @@ public class Camera extends LinearOpMode {
             float bPos = b.getCurrentPosition();
             float cPos = c.getCurrentPosition();
             float dPos = d.getCurrentPosition();
-            telemetry.addData("%4.2f", a1-aPos);
-            telemetry.addData("%4.2f", b1-bPos);
-            telemetry.addData("%4.2f", c1-cPos);
-            telemetry.addData("%4.2f", d1-dPos);
+            telemetry.addData("%4.2f", a1 - aPos);
+            telemetry.addData("%4.2f", b1 - bPos);
+            telemetry.addData("%4.2f", c1 - cPos);
+            telemetry.addData("%4.2f", d1 - dPos);
             telemetry.update();
             moveRobot(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         }
 
 
-
-    }}
+    }
+}

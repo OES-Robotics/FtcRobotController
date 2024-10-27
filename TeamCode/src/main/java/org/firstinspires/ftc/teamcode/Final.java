@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Basic: MainT", group="Linear OpMode")
+@TeleOp(name = "Basic: MainT", group = "Linear OpMode")
 //Disabled
 public class Final extends LinearOpMode {
 
@@ -72,16 +72,17 @@ public class Final extends LinearOpMode {
     public float rightLinearSlidePos;
 
     private double tmp = 0;
-    public void moveRobot(double speed, double rft, double rbt, double lft, double lbt,double timeoutS){
+
+    public void moveRobot(double speed, double rft, double rbt, double lft, double lbt, double timeoutS) {
         int nRFT;
         int nRBT;
         int nLFT;
         int nLBT;
         if (opModeIsActive()) {
-            nRFT = rightFrontDrive.getCurrentPosition() + (int)(rft);
-            nRBT = rightBackDrive.getCurrentPosition() + (int)(rbt);
-            nLFT = leftFrontDrive.getCurrentPosition() + (int)(lft);
-            nLBT = leftBackDrive.getCurrentPosition() + (int)(lbt);
+            nRFT = rightFrontDrive.getCurrentPosition() + (int) (rft);
+            nRBT = rightBackDrive.getCurrentPosition() + (int) (rbt);
+            nLFT = leftFrontDrive.getCurrentPosition() + (int) (lft);
+            nLBT = leftBackDrive.getCurrentPosition() + (int) (lbt);
             rightFrontDrive.setTargetPosition(nRFT);
             rightBackDrive.setTargetPosition(nRBT);
             leftFrontDrive.setTargetPosition(nLFT);
@@ -115,8 +116,8 @@ public class Final extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_back_drive");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "left_front_drive");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "left_front_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -167,5 +168,5 @@ public class Final extends LinearOpMode {
 //        Part 2: Go forward and putdown pixel nearby
         moveRobot(0.5, -1229, -1340, 1307, 1329, 1);
 
-        }
     }
+}

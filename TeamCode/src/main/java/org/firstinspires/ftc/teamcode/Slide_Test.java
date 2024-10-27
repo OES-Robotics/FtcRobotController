@@ -63,7 +63,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="BasicLinear", group="Linear OpMode")
+@TeleOp(name = "BasicLinear", group = "Linear OpMode")
 //Disabled
 public class Slide_Test extends LinearOpMode {
 
@@ -80,12 +80,12 @@ public class Slide_Test extends LinearOpMode {
         slideDrive.setDirection(DcMotor.Direction.REVERSE);
         slideDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("%s",slideDrive);
+        telemetry.addData("%s", slideDrive);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
-        while (true){
-            telemetry.addData("Currently at",  " at %7d",slideDrive.getCurrentPosition());
+        while (true) {
+            telemetry.addData("Currently at", " at %7d", slideDrive.getCurrentPosition());
             telemetry.update();
         }
     }
