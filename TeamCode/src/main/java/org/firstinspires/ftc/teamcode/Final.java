@@ -165,7 +165,7 @@ public class Final extends LinearOpMode {
 //        Part 1 Choose phrase
         int part = 1;
 
-//        Part 2: Go forward and putdown pixel nearby
+//        Part 2: Go forward and put down pixel nearby
         moveRobot(0.5, -1229, -1340, 1307, 1329, 1);
 
     }
