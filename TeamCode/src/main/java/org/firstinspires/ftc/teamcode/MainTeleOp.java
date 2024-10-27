@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 /*
  * This file contains an example of a Linear "OpMode".
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
@@ -67,9 +70,7 @@ public class MainTeleOp extends LinearOpMode {
         double leftBackPower = y - x + yaw;
         double rightBackPower = y + x - yaw;
         // Normalize wheel powers to be less than 1.0
-        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-        max = Math.max(max, Math.abs(leftBackPower));
-        max = Math.max(max, Math.abs(rightBackPower));
+        double max = Collections.max(Arrays.asList(Math.abs(leftFrontPower), Math.abs(rightFrontPower), Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
         if (max > 1.0) {
             leftFrontPower /= max;
@@ -77,7 +78,7 @@ public class MainTeleOp extends LinearOpMode {
             leftBackPower /= max;
             rightBackPower /= max;
         }
-        double power_module = 1 / 2f;
+        double power_module = 0.5f;
         leftFrontDrive.setPower(leftFrontPower * power_module);
         rightFrontDrive.setPower(rightFrontPower * power_module);
         leftBackDrive.setPower(leftBackPower * power_module);
