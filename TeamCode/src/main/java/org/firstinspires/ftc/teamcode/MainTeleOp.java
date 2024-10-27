@@ -35,9 +35,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "Perchance-Maybe", group = "Linear OpMode")
+@TeleOp(name = "MainTeleOp", group = "Linear OpMode")
 //Disabled
-public class Perchance extends LinearOpMode {
+public class MainTeleOp extends LinearOpMode {
 
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
@@ -76,7 +76,7 @@ public class Perchance extends LinearOpMode {
             leftBackPower /= max;
             rightBackPower /= max;
         }
-        double power_module = 2 / 3;
+        double power_module = 2 / 3f;
         leftFrontDrive.setPower(leftFrontPower * 1 / 2);
         rightFrontDrive.setPower(rightFrontPower * 1 / 2);
         leftBackDrive.setPower(leftBackPower * 1 / 2);
@@ -217,14 +217,6 @@ public class Perchance extends LinearOpMode {
 
         }
     }
-
-    // @Override
-    // public void stop() {
-    //     leftSlideDrive.setPower(0);
-    //     rightSlideDrive.setPower(0);
-
-    //     intake.setPower(0);
-    // }
 }
 
 
