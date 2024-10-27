@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -144,27 +145,8 @@ public class MainTeleOp extends LinearOpMode {
             intake_rotation.setPosition(rotation / 270.0);
             telemetry.addData("Servo_rotation", rotation);
 
-            if (gamepad1.a) {
-                intake.setPower(1);
-                telemetry.addData("Status", "servo move?");
-            } else if (gamepad1.b) {
-                intake.setPower(-1);
-                telemetry.addData("Status", "servo other move");
-            } else {
-                intake.setPower(0);
-                telemetry.addData("Status", "servo no move");
-            }
-            if (gamepad2.a) {
-                intake_winch.setPower(1);
-                telemetry.addData("Status", "servo move?");
-            } else if (gamepad2.b) {
-                intake_winch.setPower(-1);
-                telemetry.addData("Status", "servo other move");
-            } else {
-                intake_winch.setPower(0);
-                telemetry.addData("Status", "servo no move");
-            }
-
+            runGamepadInput(gamepad1, intake);
+            runGamepadInput(gamepad2, intake_winch);
 
             if (gamepad1.x) {
                 if (!button_pressed) {
@@ -214,7 +196,19 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Status", "Slide at %7d", leftSlideDrive.getCurrentPosition());
             telemetry.addData("Status", "Slide at %7d", rightSlideDrive.getCurrentPosition());
             telemetry.update();
+        }
+    }
 
+    private void runGamepadInput(Gamepad gamepad2, CRServo intake) {
+        if (gamepad2.a) {
+            intake.setPower(1);
+            telemetry.addData("Status", "servo move?");
+        } else if (gamepad2.b) {
+            intake.setPower(-1);
+            telemetry.addData("Status", "servo other move");
+        } else {
+            intake.setPower(0);
+            telemetry.addData("Status", "servo no move");
         }
     }
 }
