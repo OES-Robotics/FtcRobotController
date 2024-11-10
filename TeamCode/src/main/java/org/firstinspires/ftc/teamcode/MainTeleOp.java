@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -39,17 +39,29 @@ import java.util.Collections;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
+enum MotorType {
+    LEFT_FRONT("left_front_drive"),
+    LEFT_BACK("left_back_drive"),
+    RIGHT_FRONT("right_front_drive"),
+    RIGHT_BACK("right_back_drive"),
+    LEFT_SLIDE("left_slide"),
+    RIGHT_SLIDE("right_slide");
+
+    MotorType(String name) {
+    }
+
+    @Override
+    public String toString() {
+        return this.name();
+    }
+}
+
 @TeleOp(name = "MainTeleOp", group = "Linear OpMode")
 //Disabled
 public class MainTeleOp extends LinearOpMode {
 
-    private DcMotor leftFrontDrive = null;
-    private DcMotor leftBackDrive = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor rightBackDrive = null;
 
-    private DcMotor leftSlideDrive = null;
-    private DcMotor rightSlideDrive = null;
+    private final Map<MotorType, DcMotor> motors = new HashMap<>();
 
     private ElapsedTime runtime = new ElapsedTime();
     private CRServo intake = null;
@@ -59,75 +71,66 @@ public class MainTeleOp extends LinearOpMode {
     private int slideOut = 2200;
     private int slideIn = 0;
 
-    public void moveRobot(double x, double y, double yaw) {
+    private void moveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
-        // tmp = x;
-        // x = y;
-        // y = yaw;
-        // yaw = tmp;
-        double leftFrontPower = y + x + yaw;
-        double rightFrontPower = y - x - yaw;
-        double leftBackPower = y - x + yaw;
-        double rightBackPower = y + x - yaw;
+        Map<MotorType, Double> powers = new HashMap<MotorType, Double>() {{
+            put(MotorType.LEFT_FRONT, y + x + yaw);
+            put(MotorType.RIGHT_FRONT, y - x - yaw);
+            put(MotorType.LEFT_BACK, y - x + yaw);
+            put(MotorType.RIGHT_BACK, y + x - yaw);
+        }};
+
         // Normalize wheel powers to be less than 1.0
-        double max = Collections.max(Arrays.asList(Math.abs(leftFrontPower), Math.abs(rightFrontPower), Math.abs(leftBackPower), Math.abs(rightBackPower)));
+        double max = powers
+                .values()
+                .stream()
+                .map(Math::abs)
+                .max(Double::compare)
+                .orElse(1.0);
+        if (max > 1.0)
+            powers.keySet().forEach(motorType -> powers.put(motorType, powers.get(motorType) / max));
 
-        if (max > 1.0) {
-            leftFrontPower /= max;
-            rightFrontPower /= max;
-            leftBackPower /= max;
-            rightBackPower /= max;
-        }
+        // Set motor powers
         double power_module = 0.5f;
-        leftFrontDrive.setPower(leftFrontPower * power_module);
-        rightFrontDrive.setPower(rightFrontPower * power_module);
-        leftBackDrive.setPower(leftBackPower * power_module);
-        rightBackDrive.setPower(rightBackPower * power_module);
+        for (MotorType motorType : MotorType.values())
+            motors.get(motorType).setPower(powers.get(motorType) * power_module);
 
+        // log data
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-        telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+        telemetry.addData("Motor Powers", powers);
     }
 
     @Override
     public void runOpMode() {
-
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "left_front_drive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+        for (MotorType motorType : MotorType.values())
+            motors.put(motorType, hardwareMap.get(DcMotor.class, motorType.name()));
 
         intake = hardwareMap.get(CRServo.class, "intake");
         intake_winch = hardwareMap.get(CRServo.class, "intake_winch");
         intake_rotation = hardwareMap.get(Servo.class, "intake_rotation");
-        double rotation = 0;
 
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        motors.get(MotorType.LEFT_FRONT).setDirection(DcMotor.Direction.REVERSE);
+        motors.get(MotorType.LEFT_BACK).setDirection(DcMotor.Direction.REVERSE);
+        motors.get(MotorType.RIGHT_FRONT).setDirection(DcMotor.Direction.FORWARD);
+        motors.get(MotorType.RIGHT_BACK).setDirection(DcMotor.Direction.FORWARD);
 
-        leftSlideDrive = hardwareMap.get(DcMotor.class, "left_slide");
-        rightSlideDrive = hardwareMap.get(DcMotor.class, "right_slide");
-
+        DcMotor leftSlideDrive = motors.get(MotorType.LEFT_SLIDE);
+        assert leftSlideDrive != null;
         leftSlideDrive.setDirection(DcMotor.Direction.FORWARD);
         leftSlideDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftSlideDrive.setTargetPosition(0);
         leftSlideDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        DcMotor rightSlideDrive = motors.get(MotorType.RIGHT_SLIDE);
+        assert rightSlideDrive != null;
         rightSlideDrive.setDirection(DcMotor.Direction.REVERSE);
         rightSlideDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSlideDrive.setTargetPosition(0);
         rightSlideDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        int leftSlidePosition = leftSlideDrive.getCurrentPosition();
-        int rightSlidePosition = rightSlideDrive.getCurrentPosition();
-
-        int leftSlidePositionMax = 10;
-        int rightSlidePositionMax = 10;
+        double rotation = 0;
         boolean slide_active = false;
         boolean button_pressed = false;
-
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -136,28 +139,26 @@ public class MainTeleOp extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
+            telemetry.addData("Status", "Running");
+
             moveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-            if (gamepad2.x) {
+            if (gamepad2.x)
                 rotation = Math.min(rotation + 1, 270);
-            }
-            if (gamepad2.y) {
+            if (gamepad2.y)
                 rotation = Math.max(rotation - 1, 0);
-            }
+
             intake_rotation.setPosition(rotation / 270.0);
             telemetry.addData("Servo_rotation", rotation);
 
             runGamepadInput(gamepad1, intake);
             runGamepadInput(gamepad2, intake_winch);
 
-            if (gamepad1.x) {
-                if (!button_pressed) {
-                    button_pressed = true;
-                    slide_active = !slide_active;
-                }
-
-            } else if (button_pressed) {
+            if (gamepad1.x && !button_pressed)
+                button_pressed = slide_active = true;
+            else if (button_pressed)
                 button_pressed = false;
-            }
+
+
             if (slide_active) {
                 leftSlideDrive.setTargetPosition(slideOut);
                 rightSlideDrive.setTargetPosition(slideOut);
@@ -169,7 +170,6 @@ public class MainTeleOp extends LinearOpMode {
                 rightSlideDrive.setPower(0.75);
 
                 telemetry.addData("Status", "Moving to position: " + slideOut);
-
             } else {
                 leftSlideDrive.setTargetPosition(slideIn);
                 rightSlideDrive.setTargetPosition(slideIn);
@@ -213,5 +213,3 @@ public class MainTeleOp extends LinearOpMode {
         }
     }
 }
-
-
