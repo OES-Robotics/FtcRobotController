@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 enum MotorType {
@@ -20,17 +21,19 @@ enum MotorType {
     LEFT_SLIDE("left_slide"),
     RIGHT_SLIDE("right_slide");
 
+    private final String name;
+
     MotorType(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return this.name();
+        return this.name;
     }
 }
 
-@TeleOp(name = "MainTeleOp", group = "Linear OpMode")
-//Disabled
+@TeleOp(name = "Main_TeleOp", group = "Linear OpMode")
 public class MainTeleOp extends LinearOpMode {
     private final Map<MotorType, DcMotor> motors = new HashMap<>();
 
@@ -63,7 +66,8 @@ public class MainTeleOp extends LinearOpMode {
 
         // Set motor powers
         double power_module = 0.5f;
-        for (MotorType motorType : MotorType.values())
+        for (MotorType motorType : new MotorType[]{
+                MotorType.LEFT_FRONT, MotorType.LEFT_BACK, MotorType.RIGHT_FRONT, MotorType.RIGHT_BACK})
             motors.get(motorType).setPower(powers.get(motorType) * power_module);
 
         // log data
@@ -74,16 +78,16 @@ public class MainTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         for (MotorType motorType : MotorType.values())
-            motors.put(motorType, hardwareMap.get(DcMotor.class, motorType.name()));
+            motors.put(motorType, hardwareMap.get(DcMotor.class, motorType.toString()));
 
         intake = hardwareMap.get(CRServo.class, "intake");
         intake_winch = hardwareMap.get(CRServo.class, "intake_winch");
         intake_rotation = hardwareMap.get(Servo.class, "intake_rotation");
 
-        motors.get(MotorType.LEFT_FRONT).setDirection(DcMotor.Direction.REVERSE);
-        motors.get(MotorType.LEFT_BACK).setDirection(DcMotor.Direction.REVERSE);
-        motors.get(MotorType.RIGHT_FRONT).setDirection(DcMotor.Direction.FORWARD);
-        motors.get(MotorType.RIGHT_BACK).setDirection(DcMotor.Direction.FORWARD);
+        Objects.requireNonNull(motors.get(MotorType.LEFT_FRONT)).setDirection(DcMotor.Direction.REVERSE);
+        Objects.requireNonNull(motors.get(MotorType.LEFT_BACK)).setDirection(DcMotor.Direction.REVERSE);
+        Objects.requireNonNull(motors.get(MotorType.RIGHT_FRONT)).setDirection(DcMotor.Direction.FORWARD);
+        Objects.requireNonNull(motors.get(MotorType.RIGHT_BACK)).setDirection(DcMotor.Direction.FORWARD);
 
         DcMotor leftSlideDrive = motors.get(MotorType.LEFT_SLIDE);
         assert leftSlideDrive != null;
