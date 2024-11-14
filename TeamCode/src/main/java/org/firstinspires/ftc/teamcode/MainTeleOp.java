@@ -61,6 +61,7 @@ public class MainTeleOp extends LinearOpMode {
                 .map(Math::abs)
                 .max(Double::compare)
                 .orElse(1.0);
+
         if (max > 1.0)
             powers.keySet().forEach(motorType -> powers.put(motorType, powers.get(motorType) / max));
 
@@ -84,10 +85,14 @@ public class MainTeleOp extends LinearOpMode {
         intake_winch = hardwareMap.get(CRServo.class, "intake_winch");
         intake_rotation = hardwareMap.get(Servo.class, "intake_rotation");
 
-        Objects.requireNonNull(motors.get(MotorType.LEFT_FRONT)).setDirection(DcMotor.Direction.REVERSE);
-        Objects.requireNonNull(motors.get(MotorType.LEFT_BACK)).setDirection(DcMotor.Direction.REVERSE);
-        Objects.requireNonNull(motors.get(MotorType.RIGHT_FRONT)).setDirection(DcMotor.Direction.FORWARD);
-        Objects.requireNonNull(motors.get(MotorType.RIGHT_BACK)).setDirection(DcMotor.Direction.FORWARD);
+        Objects.requireNonNull(motors.get(MotorType.LEFT_FRONT))
+                .setDirection(DcMotor.Direction.REVERSE);
+        Objects.requireNonNull(motors.get(MotorType.LEFT_BACK))
+                .setDirection(DcMotor.Direction.REVERSE);
+        Objects.requireNonNull(motors.get(MotorType.RIGHT_FRONT))
+                .setDirection(DcMotor.Direction.FORWARD);
+        Objects.requireNonNull(motors.get(MotorType.RIGHT_BACK))
+                .setDirection(DcMotor.Direction.FORWARD);
 
         DcMotor leftSlideDrive = motors.get(MotorType.LEFT_SLIDE);
         assert leftSlideDrive != null;
