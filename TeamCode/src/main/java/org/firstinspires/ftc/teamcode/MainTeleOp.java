@@ -19,7 +19,8 @@ enum MotorType {
     RIGHT_FRONT("right_front_drive"),
     RIGHT_BACK("right_back_drive"),
     LEFT_SLIDE("left_slide"),
-    RIGHT_SLIDE("right_slide");
+    RIGHT_SLIDE("right_slide"),
+    INTAKE("intake_motor");
 
     private final String name;
 
@@ -68,12 +69,18 @@ public class MainTeleOp extends LinearOpMode {
         // Set motor powers
         double power_module = 0.5f;
         for (MotorType motorType : new MotorType[]{
-                MotorType.LEFT_FRONT, MotorType.LEFT_BACK, MotorType.RIGHT_FRONT, MotorType.RIGHT_BACK})
-            motors.get(motorType).setPower(powers.get(motorType) * power_module);
+                MotorType.LEFT_FRONT, MotorType.LEFT_BACK, MotorType.RIGHT_FRONT, MotorType.RIGHT_BACK}) {
+            Objects.requireNonNull(
+                    motors.get(motorType)).setPower(Objects.requireNonNull(powers.get(motorType)) * power_module);
+        }
 
         // log data
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motor Powers", powers);
+    }
+
+    public void updateIntake() {
+
     }
 
     @Override
@@ -94,15 +101,13 @@ public class MainTeleOp extends LinearOpMode {
         Objects.requireNonNull(motors.get(MotorType.RIGHT_BACK))
                 .setDirection(DcMotor.Direction.FORWARD);
 
-        DcMotor leftSlideDrive = motors.get(MotorType.LEFT_SLIDE);
-        assert leftSlideDrive != null;
+        DcMotor leftSlideDrive = Objects.requireNonNull(motors.get(MotorType.LEFT_SLIDE));
         leftSlideDrive.setDirection(DcMotor.Direction.FORWARD);
         leftSlideDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftSlideDrive.setTargetPosition(0);
         leftSlideDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        DcMotor rightSlideDrive = motors.get(MotorType.RIGHT_SLIDE);
-        assert rightSlideDrive != null;
+        DcMotor rightSlideDrive = Objects.requireNonNull(motors.get(MotorType.RIGHT_SLIDE));
         rightSlideDrive.setDirection(DcMotor.Direction.REVERSE);
         rightSlideDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSlideDrive.setTargetPosition(0);
@@ -137,7 +142,6 @@ public class MainTeleOp extends LinearOpMode {
                 button_pressed = slide_active = true;
             else if (button_pressed)
                 button_pressed = false;
-
 
             if (slide_active) {
                 leftSlideDrive.setTargetPosition(slideOut);
@@ -180,11 +184,11 @@ public class MainTeleOp extends LinearOpMode {
         }
     }
 
-    private void runGamepadInput(Gamepad gamepad2, CRServo intake) {
-        if (gamepad2.a) {
+    private void runGamepadInput(Gamepad gamepad, CRServo intake) {
+        if (gamepad.a) {
             intake.setPower(1);
             telemetry.addData("Status", "servo move?");
-        } else if (gamepad2.b) {
+        } else if (gamepad.b) {
             intake.setPower(-1);
             telemetry.addData("Status", "servo other move");
         } else {
