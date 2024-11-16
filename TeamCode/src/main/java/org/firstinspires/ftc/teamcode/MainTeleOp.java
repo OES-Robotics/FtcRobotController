@@ -39,8 +39,6 @@ public class MainTeleOp extends LinearOpMode {
     private final Map<MotorType, DcMotor> motors = new HashMap<>();
 
     private ElapsedTime runtime = new ElapsedTime();
-    private CRServo intake = null;
-    private CRServo intake_winch = null;
     private Servo intake_rotation = null;
 
     private int slideOut = 2200;
@@ -88,8 +86,6 @@ public class MainTeleOp extends LinearOpMode {
         for (MotorType motorType : MotorType.values())
             motors.put(motorType, hardwareMap.get(DcMotor.class, motorType.toString()));
 
-        intake = hardwareMap.get(CRServo.class, "intake");
-        intake_winch = hardwareMap.get(CRServo.class, "intake_winch");
         intake_rotation = hardwareMap.get(Servo.class, "intake_rotation");
 
         Objects.requireNonNull(motors.get(MotorType.LEFT_FRONT))
@@ -135,9 +131,6 @@ public class MainTeleOp extends LinearOpMode {
             intake_rotation.setPosition(rotation / 270.0);
             telemetry.addData("Servo_rotation", rotation);
 
-            runGamepadInput(gamepad1, intake);
-            runGamepadInput(gamepad2, intake_winch);
-
             if (gamepad1.x && !button_pressed)
                 button_pressed = slide_active = true;
             else if (button_pressed)
@@ -181,19 +174,6 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Status", "Slide at %7d", leftSlideDrive.getCurrentPosition());
             telemetry.addData("Status", "Slide at %7d", rightSlideDrive.getCurrentPosition());
             telemetry.update();
-        }
-    }
-
-    private void runGamepadInput(Gamepad gamepad, CRServo intake) {
-        if (gamepad.a) {
-            intake.setPower(1);
-            telemetry.addData("Status", "servo move?");
-        } else if (gamepad.b) {
-            intake.setPower(-1);
-            telemetry.addData("Status", "servo other move");
-        } else {
-            intake.setPower(0);
-            telemetry.addData("Status", "servo no move");
         }
     }
 }
