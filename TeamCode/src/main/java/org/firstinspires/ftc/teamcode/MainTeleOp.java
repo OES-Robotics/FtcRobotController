@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.os.Build;
+import androidx.annotation.RequiresApi;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -38,12 +40,12 @@ enum MotorType {
 public class MainTeleOp extends LinearOpMode {
     private final Map<MotorType, DcMotor> motors = new HashMap<>();
 
-    private ElapsedTime runtime = new ElapsedTime();
     private Servo intake_rotation = null;
 
     private int slideOut = 2200;
     private int slideIn = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void moveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
         Map<MotorType, Double> powers = new HashMap<MotorType, Double>() {{
@@ -73,14 +75,10 @@ public class MainTeleOp extends LinearOpMode {
         }
 
         // log data
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motor Powers", powers);
     }
 
-    public void updateIntake() {
-
-    }
-
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void runOpMode() {
         for (MotorType motorType : MotorType.values())
@@ -110,14 +108,12 @@ public class MainTeleOp extends LinearOpMode {
         rightSlideDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         double rotation = 0;
-        boolean slide_active = false;
-        boolean button_pressed = false;
+        boolean slide_active;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
-        runtime.reset();
 
         while (opModeIsActive()) {
             telemetry.addData("Status", "Running");
@@ -131,10 +127,7 @@ public class MainTeleOp extends LinearOpMode {
             intake_rotation.setPosition(rotation / 270.0);
             telemetry.addData("Servo_rotation", rotation);
 
-            if (gamepad1.x && !button_pressed)
-                button_pressed = slide_active = true;
-            else if (button_pressed)
-                button_pressed = false;
+            slide_active = gamepad1.x;
 
             if (slide_active) {
                 leftSlideDrive.setTargetPosition(slideOut);
