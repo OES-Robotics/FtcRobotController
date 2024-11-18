@@ -27,9 +27,11 @@ public class Wheels implements Component {
         double rightBackPower    = y + x - yaw;
 
         // Normalize wheel powers to be less than 1.0
-        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-        max = Math.max(max, Math.abs(leftBackPower));
-        max = Math.max(max, Math.abs(rightBackPower));
+        final double max;
+        max = Math.max(Math.abs(leftFrontPower),
+        Math.max(Math.abs(rightFrontPower),
+        Math.max(Math.abs(leftBackPower),
+                Math.abs(rightBackPower))));
 
         if (max > 1.0) {
             leftFrontPower /= max;
