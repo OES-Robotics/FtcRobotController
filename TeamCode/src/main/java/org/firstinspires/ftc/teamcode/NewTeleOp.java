@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.listeners.Listener;
+import org.firstinspires.ftc.teamcode.components.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,45 +11,46 @@ import java.util.List;
 public class NewTeleOp extends LinearOpMode {
     private final RobotState rs;
 
-    private final List<Listener> listeners;
+    private final List<Component> components;
 
     public NewTeleOp() {
         rs = new RobotState(gamepad1, gamepad2) {{
-            // wheel motors
+            // Wheel motors
             leftFrontMotor = hardwareMap.dcMotor.get("left_front_drive");
             leftBackMotor = hardwareMap.dcMotor.get("left_back_drive");
             rightFrontMotor = hardwareMap.dcMotor.get("right_front_drive");
             rightBackMotor = hardwareMap.dcMotor.get("right_back_drive");
-            // intake motor
+
+            // Intake system
             intakeMotor = hardwareMap.dcMotor.get("intake_motor");
-            // slide motors
+            intakeRotation = hardwareMap.servo.get("intake_rotation");
+
             leftSlideMotor = hardwareMap.dcMotor.get("left_slide");
             rightSlideMotor = hardwareMap.dcMotor.get("right_slide");
-            // intake rotation servo
-            intake_rotation = hardwareMap.servo.get("intake_rotation");
         }};
 
-        listeners = new ArrayList<>();
+        components = new ArrayList<>();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
 
-    void addEventListener(Listener l) {
-        listeners.add(l);
+    void addComponent(Component l) {
+        components.add(l);
     }
 
-    void addEventListeners(Listener... listeners) {
-        for (Listener l : listeners) addEventListener(l);
+    void addEventListeners(Component... components) {
+        for (Component l : components)
+            addComponent(l);
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         // Wait for click of start button
         waitForStart();
 
         // Main loop
         while (opModeIsActive())
-            listeners.forEach(l -> l.onEvent(rs));  // Call onEvent for each listener
+            components.forEach(l -> l.update(rs));  // Call update for each component
     }
 }

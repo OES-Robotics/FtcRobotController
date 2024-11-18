@@ -18,7 +18,7 @@ public class RobotState {
     public DcMotor leftSlideMotor;
     public DcMotor rightSlideMotor;
 
-    public Servo intake_rotation;
+    public Servo intakeRotation;
 
     public RobotState(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = gamepad1;
