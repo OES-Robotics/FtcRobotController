@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.components.Component;
+import org.firstinspires.ftc.teamcode.components.Wheels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class NewTeleOp extends LinearOpMode {
         }};
 
         components = new ArrayList<>();
+        components.add(new Wheels());
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
