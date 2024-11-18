@@ -151,8 +151,7 @@ public class League_Meet_1 extends LinearOpMode {
                 if (!gamepad2.b) {
                     intakeFlip.setPosition(intakeOut);
                 }
-            }
-            else {
+            } else {
                 intakeFlip.setPosition(intakeIn);
                 intake.setPower(0);
             }
@@ -164,10 +163,7 @@ public class League_Meet_1 extends LinearOpMode {
                 intakeFlip.setPosition(intakeOut);
                 //intakeFlip.setMode(Servo.RunMode.RUN_TO_POSITION);
                 //intakeFlip.setPower(0.5);
-            }
-
-
-            else {
+            } else {
                 intakeFlip.setPosition(intakeIn);
             }
             /*

@@ -16,17 +16,18 @@ public class NewTeleOp extends LinearOpMode {
     public NewTeleOp() {
         rs = new RobotState(gamepad1, gamepad2) {{
             // Wheel motors
-            leftFrontMotor = hardwareMap.dcMotor.get("left_front_drive");
-            leftBackMotor = hardwareMap.dcMotor.get("left_back_drive");
-            rightFrontMotor = hardwareMap.dcMotor.get("right_front_drive");
-            rightBackMotor = hardwareMap.dcMotor.get("right_back_drive");
+            leftFront = hardwareMap.dcMotor.get("left_front_drive");
+            leftBack = hardwareMap.dcMotor.get("left_back_drive");
+            rightFront = hardwareMap.dcMotor.get("right_front_drive");
+            rightBack = hardwareMap.dcMotor.get("right_back_drive");
 
             // Intake system
-            intakeMotor = hardwareMap.dcMotor.get("intake_motor");
-            intakeRotation = hardwareMap.servo.get("intake_rotation");
+            intake = hardwareMap.dcMotor.get("intake_motor");
+            intakeSlide = hardwareMap.dcMotor.get("intake_slide");
+            intakeFlip = hardwareMap.servo.get("intake_flip");
 
-            leftSlideMotor = hardwareMap.dcMotor.get("left_slide");
-            rightSlideMotor = hardwareMap.dcMotor.get("right_slide");
+            leftSlide = hardwareMap.dcMotor.get("left_slide");
+            rightSlide = hardwareMap.dcMotor.get("right_slide");
         }};
 
         components = new ArrayList<>();

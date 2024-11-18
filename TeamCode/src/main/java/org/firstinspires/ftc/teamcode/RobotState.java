@@ -8,17 +8,17 @@ public class RobotState {
     public Gamepad gamepad1;
     public Gamepad gamepad2;
 
-    public DcMotor leftFrontMotor;
-    public DcMotor leftBackMotor;
-    public DcMotor rightFrontMotor;
-    public DcMotor rightBackMotor;
+    public DcMotor leftFront;
+    public DcMotor leftBack;
+    public DcMotor rightFront;
+    public DcMotor rightBack;
 
-    public DcMotor intakeMotor;
+    public DcMotor intake;
+    public DcMotor intakeSlide;
+    public Servo intakeFlip;
 
-    public DcMotor leftSlideMotor;
-    public DcMotor rightSlideMotor;
-
-    public Servo intakeRotation;
+    public DcMotor leftSlide;
+    public DcMotor rightSlide;
 
     public RobotState(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = gamepad1;
