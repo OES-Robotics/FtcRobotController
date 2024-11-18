@@ -32,7 +32,7 @@ public class NewTeleOp extends LinearOpMode {
         }};
 
         components = new ArrayList<>();
-        components.add(new Wheels());
+        this.addComponents(new Wheels());
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -42,7 +42,7 @@ public class NewTeleOp extends LinearOpMode {
         components.add(l);
     }
 
-    void addEventListeners(Component... components) {
+    void addComponents(Component... components) {
         for (Component l : components)
             addComponent(l);
     }
