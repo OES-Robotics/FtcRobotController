@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-
 import org.firstinspires.ftc.teamcode.RobotState;
 
 public class Wheels implements Component {
+    public Wheels() {}
+
     @Override
     public void update(RobotState rs) {
         final double x = -rs.gamepad1.left_stick_x;
@@ -21,10 +22,10 @@ public class Wheels implements Component {
                       final DcMotor rightFront,
                       final DcMotor leftBack,
                       final DcMotor rightBack) {
-        double leftFrontPower    = y + x + yaw;
-        double rightFrontPower   = y - x - yaw;
-        double leftBackPower     = y - x + yaw;
-        double rightBackPower    = y + x - yaw;
+        double leftFrontPower = y + x + yaw;
+        double rightFrontPower = y - x - yaw;
+        double leftBackPower = y - x + yaw;
+        double rightBackPower = y + x - yaw;
 
         // Normalize wheel powers to be less than 1.0
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
