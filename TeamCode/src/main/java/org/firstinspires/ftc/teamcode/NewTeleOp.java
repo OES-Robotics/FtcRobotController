@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.components.Component;
 import org.firstinspires.ftc.teamcode.components.Intake;
+
 import org.firstinspires.ftc.teamcode.components.Wheels;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class NewTeleOp extends LinearOpMode {
             init_motor.apply(leftSlide, DcMotorSimple.Direction.REVERSE);
             init_motor.apply(rightSlide, DcMotorSimple.Direction.FORWARD);
         }};
+
         components = List.of(
                 new Wheels(),
                 new Intake()
