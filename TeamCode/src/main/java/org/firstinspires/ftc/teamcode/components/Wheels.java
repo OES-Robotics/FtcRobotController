@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-
 import org.firstinspires.ftc.teamcode.RobotState;
 
 public class Wheels implements Component {
+    public Wheels() {}
+
     @Override
     public void update(final RobotState rs) {
         final double x = -rs.gamepad1.left_stick_x;
@@ -13,7 +14,7 @@ public class Wheels implements Component {
 
         move(x, y, yaw, rs.leftFront, rs.rightFront, rs.leftBack, rs.rightBack);
     }
-
+  
     private static void move(final double x,
                              final double y,
                              final double yaw,
