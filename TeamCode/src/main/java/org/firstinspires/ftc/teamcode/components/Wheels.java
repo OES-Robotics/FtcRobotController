@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.RobotState;
+import org.firstinspires.ftc.teamcode.InternalState;
 
 public class Wheels implements Component {
     public Wheels() {}
 
     @Override
-    public void update(final RobotState rs) {
+    public void update(final InternalState rs) {
         final double x = -rs.gamepad1.left_stick_x;
         final double y = -rs.gamepad1.left_stick_y;
         final double yaw = -rs.gamepad1.right_stick_x;

@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.components;
 
-import org.firstinspires.ftc.teamcode.RobotState;
+import org.firstinspires.ftc.teamcode.InternalState;
 
 public interface Component {
-    public void update(RobotState rs);
+    public void update(InternalState rs);
 }

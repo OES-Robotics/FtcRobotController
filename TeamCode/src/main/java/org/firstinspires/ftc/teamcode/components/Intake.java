@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.RobotState;
+import org.firstinspires.ftc.teamcode.InternalState;
 
 public class Intake implements Component {
     public Intake() {}
 
     @Override
-    public void update(RobotState rs) {
+    public void update(InternalState rs) {
         final int intakeSlideOut = 938;
         final double intakeOut = 0.75;
 

@@ -14,7 +14,7 @@ import java.util.function.BiFunction;
 
 @TeleOp(name = "NewTeleOp", group = "Linear OpMode")
 public class NewTeleOp extends LinearOpMode {
-    private final RobotState rs;
+    private final InternalState rs;
 
     private final List<Component> components;
 
@@ -27,7 +27,7 @@ public class NewTeleOp extends LinearOpMode {
             return null;
         };
 
-        rs = new RobotState(gamepad1, gamepad2) {{
+        rs = new InternalState(gamepad1, gamepad2) {{
             // Wheel motors
             leftFront = hardwareMap.dcMotor.get("left_front_drive");
             leftBack = hardwareMap.dcMotor.get("left_back_drive");
